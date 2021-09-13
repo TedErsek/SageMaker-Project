@@ -57,7 +57,7 @@ def output_fn(prediction_output, accept):
     print('Serializing the generated output.')
     return str(prediction_output)
 
-def predict_fn(input_data, model):
+def predict_fn(self, input_data, model):
     print('Inferring sentiment of input data.')
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -85,6 +85,11 @@ def predict_fn(input_data, model):
 
     # TODO: Compute the result of applying the model to the input data. The variable `result` should
     #       be a numpy array which contains a single integer which is either 1 or 0
-    result = model(data)
-
+    with torch.no_grad():
+        output = model(data)
+        result = int(np.round(output.numpy))
+        
     return result
+
+
+
